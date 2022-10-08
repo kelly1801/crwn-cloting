@@ -41,10 +41,10 @@ async function handleSubmit(event) {
     // check if its authenticathed
     try {
         const {user} = await createAuthUserWithEmailAndPassword(email, password)
-    console.log(user)
-
+   
+        resetFormField() 
     await createUserDocumentFromAuth(user, { displayName})
-resetFormField() 
+
 } 
     catch (error) {
         if(error.code === 'auth/email-already-in-use'){
@@ -96,7 +96,7 @@ name="confirmPassword"
 value={confirmPassword}
 />
 
-<Button   type='submit'>Sign up</Button>
+<Button type='submit'>Sign up</Button>
     </form>
     </div>
     )

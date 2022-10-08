@@ -6,7 +6,8 @@ import {
   signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
-  createUserWithEmailAndPassword
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword 
 } from "firebase/auth";
 
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
@@ -30,6 +31,7 @@ export const auth = getAuth();
 
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider)
+
 
 // set database, directly points to the db
 export const crwnDb = getFirestore();
@@ -60,8 +62,14 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) 
   return userDocRef;
 };
 
+
 export async function createAuthUserWithEmailAndPassword(email, password){
 if(!email || !password) return
 
 return await createUserWithEmailAndPassword(auth, email, password)
 }
+export async function signInAuthUserWithEmailAndPassword(email, password){
+  if(!email || !password) return
+  
+  return await signInWithEmailAndPassword(auth, email, password)
+  }
