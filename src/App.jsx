@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Nav from "./components/Nav";
 import Shop from "./pages/Shop";
 import Authentication from "./pages/Authentication";
+import CheckoutPage from "./pages/CheckoutPage";
 function App() {
   return (
     <BrowserRouter>
@@ -11,6 +12,7 @@ function App() {
     <Route path="/" element={ <Home/>} />
     <Route path="shop" element={ <Shop/>} />
     <Route path="auth" element={ <Authentication/>} />
+    <Route path="checkout" element={ <CheckoutPage/>} />
     </Routes>
     </BrowserRouter>
    
