@@ -4,8 +4,8 @@ import {
 } from "../utils/firebase/firebase.utils";
 import SignUp from "../components/SignUp-form/SignUp";
 import SignIn from "../components/SignIn-form/SignIn-form";
-import Button from "../components/buttons/Button"
-import '../components/styles/authentication.styles.scss'
+
+import {AuthenticationContainer} from '../components/styles/authentication.styles.js'
 
 const Authentication = () => {
   const logGoogleUser = async () => {
@@ -14,11 +14,11 @@ const Authentication = () => {
   };
 
   return (
-    <div className="authentication-container">
+    <AuthenticationContainer>
       <SignIn />
       <SignUp />
       
-    </div>
+    </AuthenticationContainer>
   );
 };
 

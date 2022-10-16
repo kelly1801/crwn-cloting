@@ -1,6 +1,6 @@
 import { useState } from "react";
 import FormInput from "../form-input/FormInput";
-import "./sign-in-form.styles.scss";
+import {SignInContainer, ButtonContainer} from "./sign-in-form.styles.js";
 import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
@@ -11,7 +11,7 @@ const defaultFormFields = {
   email: "",
   password: "",
 };
-import Button from "../buttons/button";
+import Button, {buttonTypeClasses} from "../buttons/button";
 
 function SignIn() {
   const [formFields, setFormFields] = useState(defaultFormFields);
@@ -60,7 +60,7 @@ function SignIn() {
   }
 
   return (
-    <div className="sign-in-container">
+    <SignInContainer>
       <h2>Already have an account</h2>
       <span>Sign Up with your email and password</span>
 
@@ -83,16 +83,16 @@ function SignIn() {
           value={password}
         />
 
-        <div className="buttons-container">
+        <ButtonContainer>
           <Button type="submit" onSubmit={handleSubmit}>
             Sign In
           </Button>
-          <Button type="button"buttonType="google" onClick={signInWithGoogle}>
+          <Button type="button" buttonType={buttonTypeClasses.google} onClick={signInWithGoogle}>
             Sign In with google
           </Button>
-        </div>
+        </ButtonContainer>
       </form>
-    </div>
+    </SignInContainer>
   );
 }
 

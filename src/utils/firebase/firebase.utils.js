@@ -7,12 +7,21 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword ,
+  signInWithEmailAndPassword,
   signOut,
-  onAuthStateChanged
+  onAuthStateChanged,
 } from "firebase/auth";
 
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyAcVe_FDLa2fBGOk2FCPUSIQrooUENVj40",
   authDomain: "crwn-clothing-db-b55ce.firebaseapp.com",
@@ -31,17 +40,21 @@ googleProvider.setCustomParameters({
 
 export const auth = getAuth();
 
-export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
-export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider)
-
+export const signInWithGooglePopup = () =>
+  signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () =>
+  signInWithRedirect(auth, googleProvider);
 
 // set database, directly points to the db
 export const crwnDb = getFirestore();
 
 // create user
 
-export const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) => {
-  if(!userAuth) return
+export const createUserDocumentFromAuth = async (
+  userAuth,
+  additionalInfo = {}
+) => {
+  if (!userAuth) return;
   const userDocRef = doc(crwnDb, "users", userAuth.uid);
   const userSnapshot = await getDoc(userDocRef);
 
@@ -54,7 +67,7 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) 
         displayName,
         email,
         createdAt,
-        ...additionalInfo
+        ...additionalInfo,
       });
     } catch (error) {
       console.log("error creating the user", error.message);
@@ -64,18 +77,53 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInfo = {}) 
   return userDocRef;
 };
 
+export async function createAuthUserWithEmailAndPassword(email, password) {
+  if (!email || !password) return;
 
-export async function createAuthUserWithEmailAndPassword(email, password){
-if(!email || !password) return
-
-return await createUserWithEmailAndPassword(auth, email, password)
+  return await createUserWithEmailAndPassword(auth, email, password);
 }
-export async function signInAuthUserWithEmailAndPassword(email, password){
-  if(!email || !password) return
-  
-  return await signInWithEmailAndPassword(auth, email, password)
-  }
+export async function signInAuthUserWithEmailAndPassword(email, password) {
+  if (!email || !password) return;
 
-export const signOutUser = async () => await signOut(auth) 
+  return await signInWithEmailAndPassword(auth, email, password);
+}
 
-export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback)
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) =>
+  onAuthStateChanged(auth, callback);
+
+// this function allow us to automaticallly set up  a collections and it's documents all at once instead of creating it one by one
+// create collection, categories and add products
+// collectionkey is a string we parse in to name the collection
+// objects to add is a json file we provided to store the items on the database
+
+export const addCollectionAndDocument = async (collectionKey, objectsToAdd) => {
+  // collectionRef creates a collection inside  the db with a name parsed in by us
+
+  const collectionRef = collection(crwnDb, collectionKey);
+  // the wite batch is the method that allow us to send all the data at once
+  const batch = writeBatch(crwnDb);
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    // SET the batch to add the objects inside a document referenced before
+
+    batch.set(docRef, object);
+  });
+  // send to the database
+  await batch.commit();
+};
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(crwnDb, "Categories");
+  const q = query(collectionRef);
+  const querySnapshot = await getDocs(q);
+
+  const categorieMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+  return categorieMap;
+};

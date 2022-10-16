@@ -3,16 +3,16 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.scss";
 import { UserProvider } from "./context/user.context";
-import { ProductsProvider } from "./context/products.context";
+import { CategoriesProvider } from "./context/categories.context";
 import {CartProvider} from './context/cart.context'
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <UserProvider>
-      <ProductsProvider>
+      <CategoriesProvider>
         <CartProvider>
         <App />
         </CartProvider>
-      </ProductsProvider>
+      </CategoriesProvider>
     </UserProvider>
   </React.StrictMode>
 );
