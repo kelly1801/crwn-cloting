@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import Home from "./pages/Home";
 import Nav from "./components/Nav/Nav";
@@ -11,10 +11,10 @@ import {useDispatch} from 'react-redux'
 function App() {
   const dispatch = useDispatch()
   useEffect(()=>{
-    const unsubscribe = onAuthStateChangedListener((user)=>{
+    const unsubscribe = onAuthStateChangedListener(async (user)=>{
         if (user){
         
-            createUserDocumentFromAuth(user);
+           await createUserDocumentFromAuth(user);
         }
         dispatch(setCurrentUser(user))
     })
