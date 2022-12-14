@@ -1,11 +1,17 @@
-import { CATEGORIES_ACTION_TYPES } from "./category.types.js";
-export const CATEGORIES_INITIAL_STATE = {
+import { CATEGORIES_ACTION_TYPES, Category } from "./category.types";
+import { SetCategories } from "./category.action";
+
+export type CategoriesState = {
+  readonly categories: Category[]
+}
+export const CATEGORIES_INITIAL_STATE: CategoriesState = {
   categories: [],
 };
 
+
 export const categoriesReducer = (
   state = CATEGORIES_INITIAL_STATE,
-  action = {}
+  action = {} as SetCategories
 ) => {
   const { type, payload } = action;
 

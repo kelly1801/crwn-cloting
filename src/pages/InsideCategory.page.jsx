@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import ProductCard from '../components/product-card/product-card'
 import {useSelector} from 'react-redux'
-import { selectCategoriesMap } from '../store/categories/category.selector.js'
+import { selectCategoriesMap } from '../store/categories/category.selector.ts'
 function InsideCategory() {
   const { category } = useParams()
   console.log('render/re-rendering category component')
